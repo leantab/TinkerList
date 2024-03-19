@@ -212,4 +212,22 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weather API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the configuration for the Weather API. You may
+    | specify the base URL, API key, and other options that are required
+    | to access the Weather API.
+    |
+    */
+
+    'weather_api' => [
+        'base_uri' => env('WEATHER_API_BASE_URI', 'https://api.weatherapi.com/v1/'),
+        'api_key' => env('WEATHER_API_KEY', 'YOUR_API_KEY'),
+        'timeout' => 10,
+    ],
 ];
