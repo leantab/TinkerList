@@ -225,9 +225,6 @@ return [
     |
     */
 
-    'weather_api' => [
-        'base_uri' => env('WEATHER_API_BASE_URI', 'https://api.weatherapi.com/v1/'),
-        'api_key' => env('WEATHER_API_KEY', 'YOUR_API_KEY'),
-        'timeout' => 10,
-    ],
+    'weather_api_base_uri' => env('WEATHER_API_URL', 'https://api.weatherapi.com/v1'),
+    'weather_api_api_key' => env('WEATHER_API_KEY', 'YOUR_API_KEY'),
 ];
