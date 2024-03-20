@@ -14,7 +14,6 @@ return new class extends Migration
             $table->dateTime('date_time');
             $table->foreignId('location_id')->constrained();
             $table->foreignId('creator_id')->constrained('users');
-            $table->array('Invitees');
             $table->timestamps();
         });
     }

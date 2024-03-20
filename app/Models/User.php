@@ -23,22 +23,22 @@ class User extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function events()
+    {
+        return $this->hasMany(CalendarEvent::class, 'created_by');
+    }
+
+    public function attendedEvents()
+    {
+        return $this->belongsToMany(CalendarEvent::class, 'calendar_event_attendees', 'user_id', 'calendar_event_id');
+    }
 }
