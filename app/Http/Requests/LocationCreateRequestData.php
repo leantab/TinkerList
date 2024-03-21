@@ -11,6 +11,9 @@ class LocationCreateRequestData extends Data
         public string $name,
         public string $city,
         public string $country,
+        public ?float $latitude = null,
+        public ?float $longitude = null,
+        public ?string $region = null,
     ) {}
 
     public static function fromRequest(Request $request): self

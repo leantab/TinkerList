@@ -13,11 +13,11 @@ return new class extends Migration
             $table->integer('external_id')->unique();
             $table->string('name');
             $table->string('city');
-            $table->string('region');
+            $table->string('region')->nullable();
             $table->string('country');
-            $table->string('lat');
-            $table->string('lon');
-            $table->string('timezone');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('timezone')->nullable();
             $table->timestamps();
         });
     }
