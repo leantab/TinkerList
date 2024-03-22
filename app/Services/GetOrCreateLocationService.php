@@ -18,7 +18,7 @@ class GetOrCreateLocationService
 
     public function __invoke(string $locationName)
     {
-        $location = Location::whereAny(['name', 'city'], 'LIKE',  $locationName);
+        $location = Location::whereAny(['name', 'city'], 'LIKE',  $locationName)->first();
 
         if (!$location) {
             $location = $this->createLocation($locationName);

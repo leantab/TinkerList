@@ -2,16 +2,19 @@
 
 namespace App\Http\Requests;
 
-use DateTime;
 use Illuminate\Http\Request;
+use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 
 class EventCreateRequestData extends Data
 {
     public function __construct(
         public string $name,
+        #[MapInputName('location_name')]
         public string $locationName,
-        public DateTime $dateTime,
+        #[MapInputName('date_time')]
+        public string $dateTime,
+        #[MapInputName('invitees')]
         public array $attendees,
     ) {}
 
@@ -19,8 +22,9 @@ class EventCreateRequestData extends Data
     {
         return new self(
             name: $request->input('name'),
-            city: $request->input('city'),
-            country: $request->input('country'),
+            locationName: $request->input('location_name'),
+            dateTime: $request->input('date_time'),
+            attendees: $request->input('invitees'),
         );
     }
 }

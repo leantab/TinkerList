@@ -3,10 +3,11 @@
 namespace App\Actions\Events;
 
 use App\Http\Requests\EventCreateRequestData;
+use App\Jobs\SendEmailInvitationJob;
 use App\Models\CalendarEvent;
 use App\Services\GetOrCreateLocationService;
 use App\Services\GetOrCreateUserService;
-use Exception;
+use Carbon\Carbon;
 
 class CreateEventAction
 {
@@ -24,7 +25,7 @@ class CreateEventAction
         $event = CalendarEvent::create([
             'name' => $data->name,
             'location_id' => $location->id,
-            'date_time' => $data->dateTime,
+            'date_time' => Carbon::parse($data->dateTime),
             'creator_id' => auth('api')->id(),
         ]);
 
@@ -34,6 +35,13 @@ class CreateEventAction
     }
 
     protected function afterCreate(CalendarEvent $event, EventCreateRequestData $data)
+    {
+        $this->attachAndInviteAttendees($event, $data);
+
+        // get weather info for event
+    }
+
+    protected function attachAndInviteAttendees(CalendarEvent $event, EventCreateRequestData $data)
     {
        
         $user = auth('api')->user();
@@ -45,6 +53,6 @@ class CreateEventAction
             $event->attendees()->attach($attendee);
         }
 
-        
+        SendEmailInvitationJob::dispatch($event);
     }
 }

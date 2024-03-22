@@ -9,7 +9,7 @@ class CreateUserAction
 {
     public function __invoke(CreateUserData $data)
     {
-        $user = User::create($data);
+        $user = User::create($data->toArray());
 
         return $user;
     }

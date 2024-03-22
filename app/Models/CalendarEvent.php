@@ -9,6 +9,12 @@ class CalendarEvent extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
+    protected $casts = [
+        'date_time' => 'datetime',
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
