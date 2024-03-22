@@ -19,12 +19,6 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth'])
     ->name('dashboard');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
 Route::get('/documentation', function () {
     return view('swagger.index');
 });
-
-require __DIR__.'/auth.php';

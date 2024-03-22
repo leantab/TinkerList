@@ -9,14 +9,14 @@ class LocationCreateTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_post_request_to_create_location(): void
     {
-        $response = $this->post('/locations', [
+        $response = $this->post('/api/locations', [
             'name' => 'Austin HQ',
             'city' => 'Austin',
             'country' => 'United States',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 }

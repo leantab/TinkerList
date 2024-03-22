@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\Info(title="TinkerList API - Auth methods", version="1.0")
+ *
+ * @OA\SecurityScheme(
+ *      securityScheme="bearer",
+ *      in="header",
+ *      name="Authorization",
+ *      type="http",
+ *      scheme="bearer",
+ *      bearerFormat="JWT",
+ * ),
+ */
 class AuthController extends Controller
 {
-    /**
-     * -
-     *
-     * @return void
-     *
-     * @OA\Info(title="CompanyHike API", version="1.0")
-     *
-     * @OA\SecurityScheme(
-     *      securityScheme="bearer",
-     *      in="header",
-     *      name="Authorization",
-     *      type="http",
-     *      scheme="bearer",
-     *      bearerFormat="JWT",
-     * ),
-     */
+    
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
@@ -56,9 +56,12 @@ class AuthController extends Controller
      *   @OA\Response(response=403, description="Errores de autenticación")
      * )
      */
-    public function login()
+    public function login(LoginRequest $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
 
         if (! $token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -124,13 +127,9 @@ class AuthController extends Controller
      *          mediaType="multipart/form-data",
      *          @OA\Schema(
      *              @OA\Property(property="name", type="string"),
-     *              @OA\Property(property="lastname", type="string"),
      *              @OA\Property(property="email", type="string"),
      *              @OA\Property(property="password", type="string"),
      *              @OA\Property(property="password_confirmation", type="string"),
-     *              @OA\Property(property="language", type="string", description="[en / es / pt]"),
-     *              @OA\Property(property="community_invitation", type="string", description="ID de invitación a comunidad ENCRIPTADO"),
-     *              @OA\Property(property="match_invitation", type="string", description="ID de invitación a partida ENCRIPTADO")
      *          )
      *      )
      *   ),

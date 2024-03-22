@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ Route::group([
 
 Route::group([
         'prefix' => 'locations',
-        'middleware' => 'auth:sanctum'
+        'middleware' => 'api'
     ], function () {
         Route::get('/', [LocationController::class, 'index']);
         Route::get('/{id}', [LocationController::class, 'show']);
@@ -45,7 +46,7 @@ Route::group([
 
 Route::group([
         'prefix' => 'events',
-        'middleware' => 'auth:sanctum'
+        'middleware' => 'api'
     ], function () {
         Route::get('/', [CalendarEventController::class, 'index']);
         Route::get('/{id}', [CalendarEventController::class, 'show']);

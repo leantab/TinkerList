@@ -5,11 +5,14 @@ namespace App\Actions\Locations;
 use App\Http\Requests\LocationCreateRequestData;
 use App\Models\Location;
 use App\Services\External\WeatherApiService;
+use App\Services\GetCityInformationFromExternalService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class CreateLocationAction
 {
     public function __construct(
-        protected WeatherApiService $weatherApiService
+        protected GetCityInformationFromExternalService $getCityInformationFromExternalService,
     )
     {        
     }
@@ -32,14 +35,19 @@ class CreateLocationAction
 
     protected function getInfoFromExternalService(LocationCreateRequestData $data)
     {
-        $location = $data->city . ',' . $data->country;
+        if ($data->latitude != null && $data->longitude != null) {
+            return;
+        }
 
-        $apiInfo = $this->weatherApiService->search($location);
+        $cityInfo = $this->getCityInformationFromExternalService->getCityInformation($data->city);
 
-        if (is_array($apiInfo) && count($apiInfo) > 0){
-            $data->latitude = $apiInfo[0]['latitude'];
-            $data->longitude = $apiInfo[0]['longitude'];
-            $data->region = $apiInfo[0]['longitude'];
+        if (is_array($cityInfo)){
+            $data->latitude = $cityInfo['lat'];
+            $data->longitude = $cityInfo['lon'];
+            $data->region = $cityInfo['region'];
+            $data->external_id = $cityInfo['id'];
+        } else {
+            return;
         }
     }
 }

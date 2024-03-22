@@ -2,64 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Events\CreateEventAction;
+use App\Http\Requests\EventCreateRequestData;
 use App\Models\CalendarEvent;
+use App\Services\GetOrCreateUserService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CalendarEventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(
+        private CreateEventAction $creatEventAction,
+        private GetOrCreateUserService $getOrCreateUserService,
+    )
+    {
+    }
+
     public function index()
     {
-        //
+        $user = auth('api')->user();
+        return $user->attendedEvents;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(EventCreateRequestData $data)
     {
-        //
-    }
+        try {
+            $event = $this->creatEventAction->__invoke($data);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+            return response()->json($event, 201);
+        } catch (Exception $e) {
+            Log::error('Failed to create event', ['error' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(CalendarEvent $calendarEvent)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CalendarEvent $calendarEvent)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, CalendarEvent $calendarEvent)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CalendarEvent $calendarEvent)
+    public function destroy(CalendarEvent $event)
     {
-        //
+        $event->attendees()->detach();
+
+        $event->delete();
+
+        return response()->json(['message' => 'Event deleted successfully']);
     }
 }

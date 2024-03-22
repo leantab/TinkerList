@@ -2,19 +2,17 @@
 
 namespace App\Http\Requests;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
 
-class LocationCreateRequestData extends Data
+class EventCreateRequestData extends Data
 {
     public function __construct(
         public string $name,
-        public string $city,
-        public string $country,
-        public ?float $latitude = null,
-        public ?float $longitude = null,
-        public ?string $region = null,
-        public ?string $external_id = null,
+        public string $locationName,
+        public DateTime $dateTime,
+        public array $attendees,
     ) {}
 
     public static function fromRequest(Request $request): self

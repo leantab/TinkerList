@@ -2,13 +2,14 @@
 
 namespace App\Actions\Users;
 
+use App\Data\CreateUserData;
 use App\Models\User;
 
 class CreateUserAction
 {
-    public function __invoke(array $data)
+    public function __invoke(CreateUserData $data)
     {
-        $user = User::create($validatedData);
+        $user = User::create($data);
 
         return $user;
     }

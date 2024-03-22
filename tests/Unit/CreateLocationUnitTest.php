@@ -4,19 +4,12 @@ namespace Tests\Unit;
 
 use App\Actions\Locations\CreateLocationAction;
 use App\Http\Requests\LocationCreateRequestData;
-use App\Services\External\WeatherApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CreateLocationUnitTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function __construct(
-        private CreateLocationAction $createLocationAction
-    )
-    {
-    }
 
     public function create_location_test(): void
     {
@@ -26,8 +19,7 @@ class CreateLocationUnitTest extends TestCase
             'country' => 'United States',
         ]);
 
-        $weatherApiService = $this->createMock(WeatherApiService::class);
-        $action = new CreateLocationAction($weatherApiService);
+        $action = $this->createMock(CreateLocationAction::class);
         $action->__invoke($data);
 
         $this->assertDatabaseHas('locations', [
