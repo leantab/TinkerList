@@ -29,4 +29,9 @@ class CalendarEvent extends Model
     {
         return $this->belongsTo(Location::class);
     } 
+
+    public function weatherInfo()
+    {
+        return $this->hasOne(WeatherInfo::class);
+    }
 }

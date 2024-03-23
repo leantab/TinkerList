@@ -48,8 +48,8 @@ class WeatherApiTest extends TestCase
     public function test_future_api(): void
     {
         $weatherApi = new WeatherApiService();
-        $tomorrow = Carbon::now()->addDays(20)->format('Y-m-d');
-        $response = $weatherApi->getForecastForEvent('Paris', $tomorrow, 14);
+        $future = Carbon::now()->addDays(20)->format('Y-m-d');
+        $response = $weatherApi->getFutureForecast('Paris', $future);
 
         $this->assertIsArray($response);
         $this->assertArrayHasKey('location', $response);

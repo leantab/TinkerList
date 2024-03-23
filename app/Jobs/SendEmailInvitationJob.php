@@ -24,7 +24,7 @@ class SendEmailInvitationJob implements ShouldQueue
     {
         $event = $this->event;
         $event->attendees()->each(function ($user) use ($event) {
-           Mail::send(new EventInvitationMail($user, $event));
+           Mail::to($user->email)->send(new EventInvitationMail($user, $event));
         });
     }
 }

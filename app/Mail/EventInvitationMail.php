@@ -26,7 +26,6 @@ class EventInvitationMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            to: new Address($this->user->email, $this->user->name),
             subject: 'Event Invitation', 
         );
     }
@@ -34,7 +33,7 @@ class EventInvitationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.event_invitation',
+            markdown: 'email.event_invitation',
             with: [
                 'user' => $this->user,
                 'event' => $this->event,
