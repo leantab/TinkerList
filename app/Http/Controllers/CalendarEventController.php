@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Actions\Events\CreateEventAction;
 use App\Http\Requests\EventCreateRequestData;
 use App\Models\CalendarEvent;
+use App\Models\User;
+use App\Resources\EventResourceData;
 use App\Services\GetOrCreateUserService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -21,18 +24,23 @@ class CalendarEventController extends Controller
 
     public function index()
     {
-        $user = auth('api')->user();
-        return $user->attendedEvents;
+        $user = User::find(auth('api')->id());
+        return EventResourceData::collect($user->attendedEvents()->paginate(10) );
     }
 
-    public function store(EventCreateRequestData $data)
+    public function show(CalendarEvent $event): EventResourceData
+    {
+        return EventResourceData::fromModel($event);
+    }
+
+    public function store(EventCreateRequestData $data): JsonResponse
     {
         try {
             $event = $this->creatEventAction->__invoke($data);
 
-            return response()->json($event, 201);
+            return response()->json(EventResourceData::fromModel($event), 201);
         } catch (Exception $e) {
-            Log::error('Failed to create event', ['error' => $e->getMessage()]);
+            Log::error('Failed to create event', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }

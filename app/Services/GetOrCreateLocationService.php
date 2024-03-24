@@ -37,8 +37,8 @@ class GetOrCreateLocationService
                 'city' => $locationName,
                 'region' => $cityInfo['region'],
                 'country' => $cityInfo['country'],
-                'latitude' => $cityInfo['lat'],
-                'longitude' => $cityInfo['lon'],
+                'latitude' => $cityInfo['latitude'],
+                'longitude' => $cityInfo['longitude'],
             ]));
             
             return $location;

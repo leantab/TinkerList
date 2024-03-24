@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Actions\Locations\CreateLocationAction;
 use App\Http\Requests\LocationCreateRequestData;
 use App\Models\Location;
+use App\Resources\LocationResourceData;
 use App\Services\External\WeatherApiService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LocationController extends Controller
 {
@@ -26,9 +30,16 @@ class LocationController extends Controller
         return Location::findOrFail($id);
     }
 
-    public function store(LocationCreateRequestData $data)
+    public function store(LocationCreateRequestData $data): JsonResponse
     {
-        return $this->createLocationAction->__invoke($data);
+        try {
+            $location = $this->createLocationAction->__invoke($data);
+
+            return response()->json(LocationResourceData::fromModel($location), 201);
+        } catch (Exception $e) {
+            Log::error('Failed to create location', ['error' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, Location $location)

@@ -42,10 +42,10 @@ class CreateLocationAction
         $cityInfo = $this->getCityInformationFromExternalService->getCityInformation($data->city);
 
         if (is_array($cityInfo)){
-            $data->latitude = $cityInfo['lat'];
-            $data->longitude = $cityInfo['lon'];
+            $data->latitude = $cityInfo['latitude'];
+            $data->longitude = $cityInfo['longitude'];
             $data->region = $cityInfo['region'];
-            $data->external_id = $cityInfo['id'];
+            $data->external_id = $cityInfo['external_id'];
         } else {
             return;
         }

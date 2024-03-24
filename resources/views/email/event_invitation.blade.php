@@ -10,6 +10,13 @@
         View Event
     </x-mail::button>
 
+    <x-mail::panel>
+        <strong>Event Details:</strong><br>
+        <strong>Title:</strong> {{ $event->name }}<br>
+        <strong>Date:</strong> {{ $event->date_time->format('Y-m-d H:i') }}<br>
+        <strong>Location:</strong> {{ $event->location }}<br>
+    </x-mail::panel>
+
     @if ($newUser)
         <strong> Note: </strong>
         Since you don't have an account yet, we've created one for you. <br>

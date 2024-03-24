@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class GetWeatherInfoForEvent implements ShouldQueue
+class GetWeatherInfoForEventJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,25 +31,26 @@ class GetWeatherInfoForEvent implements ShouldQueue
             $response = $service->getFutureForecast($location->city, $this->event->date_time->format('Y-m-d'));
         } else {
             $response = $service->getForecastForEvent(
-                $location->city, 
+                $this->event->location->city, 
                 $this->event->date_time->format('Y-m-d'), 
                 $this->event->date_time->format('H')
             );
         }
+        // dd($response);
 
-        $temp = $response['forecast']['forecastday']['day']['avgtemp_c'] . '°C (' . $response['forecast']['forecastday']['day']['avgtemp_f'] . '°F)';
-        $desc = $response['forecast']['forecastday']['day']['condition']['text'];
-        $weather = $response['forecast']['forecastday']['day']['condition']['icon'];
-        $precipitation = $response['forecast']['forecastday']['day']['daily_chance_of_rain'] . '%';
+        $temp = $response['forecast']['forecastday'][0]['day']['avgtemp_c'] . '°C (' . $response['forecast']['forecastday'][0]['day']['avgtemp_f'] . '°F)';
+        $desc = $response['forecast']['forecastday'][0]['day']['condition']['text'];
+        $weather = $response['forecast']['forecastday'][0]['day']['condition']['icon'];
+        $precipitation = $response['forecast']['forecastday'][0]['day']['daily_chance_of_rain'] . '%';
 
-        $weatherInfo = new WeatherInfo([
+        $weatherInfo = WeatherInfo::create([
             'event_id' => $this->event->id,
             'location_id' => $location->id,
             'temperature' => $temp,
             'description' => $desc,
             'weather' => $weather,
             'precipitation_probability' => $precipitation,
-            'raw_data' => $response,
+            'raw_data' => json_encode($response),
         ]);
     }
 }

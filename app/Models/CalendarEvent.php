@@ -32,6 +32,6 @@ class CalendarEvent extends Model
 
     public function weatherInfo()
     {
-        return $this->hasOne(WeatherInfo::class);
+        return $this->hasOne(WeatherInfo::class, 'event_id');
     }
 }

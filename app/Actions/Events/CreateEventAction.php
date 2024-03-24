@@ -3,6 +3,7 @@
 namespace App\Actions\Events;
 
 use App\Http\Requests\EventCreateRequestData;
+use App\Jobs\GetWeatherInfoForEventJob;
 use App\Jobs\SendEmailInvitationJob;
 use App\Models\CalendarEvent;
 use App\Services\GetOrCreateLocationService;
@@ -34,14 +35,15 @@ class CreateEventAction
         return $event;
     }
 
-    protected function afterCreate(CalendarEvent $event, EventCreateRequestData $data)
+    protected function afterCreate(CalendarEvent $event, EventCreateRequestData $data): void
     {
         $this->attachAndInviteAttendees($event, $data);
 
         // get weather info for event
+        GetWeatherInfoForEventJob::dispatch($event);
     }
 
-    protected function attachAndInviteAttendees(CalendarEvent $event, EventCreateRequestData $data)
+    protected function attachAndInviteAttendees(CalendarEvent $event, EventCreateRequestData $data): void
     {
        
         $user = auth('api')->user();
