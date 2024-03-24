@@ -11,6 +11,8 @@ class CalendarEvent extends Model
 
     protected $guarded = [];
 
+    protected $table = 'calendar_events';
+
     protected $casts = [
         'date_time' => 'datetime',
     ];
@@ -27,7 +29,7 @@ class CalendarEvent extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Location::class, 'location_id', );
     } 
 
     public function weatherInfo()

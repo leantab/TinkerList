@@ -13,6 +13,6 @@ class Location extends Model
 
     public function events()
     {
-        return $this->hasMany(CalendarEvent::class);
+        return $this->hasMany(CalendarEvent::class, 'location_id');
     }
 }

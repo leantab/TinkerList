@@ -45,9 +45,10 @@ class CreateEventAction
 
     protected function attachAndInviteAttendees(CalendarEvent $event, EventCreateRequestData $data): void
     {
-       
-        $user = auth('api')->user();
-        $event->attendees()->attach($user);
+        $userEmail = auth('api')->user()->email;
+        if (!in_array($userEmail, $data->attendees)) {
+            $data->attendees[] = $userEmail;
+        }
 
         foreach ($data->attendees as $attendeeEmail) {
             // get or create user and attach to event

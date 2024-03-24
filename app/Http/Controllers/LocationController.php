@@ -42,13 +42,9 @@ class LocationController extends Controller
         }
     }
 
-    public function update(Request $request, Location $location)
+    public function update(Request $request, int $id)
     {
-        //
-    }
-
-    public function destroy(Location $location)
-    {
-        //
+        $location = Location::findOrFail($id);
+        $location->update($request->all());
     }
 }

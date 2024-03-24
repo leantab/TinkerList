@@ -9,13 +9,13 @@ use Spatie\LaravelData\Data;
 class EventUpdateRequestData extends Data
 {
     public function __construct(
-        public string $name,
+        public ?string $name,
         #[MapInputName('location_name')]
-        public string $locationName,
+        public ?string $locationName,
         #[MapInputName('date_time')]
-        public string $dateTime,
+        public ?string $dateTime,
         #[MapInputName('invitees')]
-        public array $attendees,
+        public ?array $attendees,
     ) {}
 
     public static function fromRequest(Request $request): self

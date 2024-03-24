@@ -40,18 +40,17 @@ Route::group([
         Route::get('/{id}', [LocationController::class, 'show']);
         Route::post('/', [LocationController::class, 'store']);
         Route::put('/{id}', [LocationController::class, 'update']);
-        Route::delete('/{id}', [LocationController::class, 'destroy']);
     }
 );
 
 Route::group([
         'prefix' => 'events',
-        'middleware' => 'api'
+        'middleware' => 'auth:api'
     ], function () {
         Route::get('/', [CalendarEventController::class, 'index']);
-        Route::get('/{id}', [CalendarEventController::class, 'show']);
+        Route::get('/{eventId}', [CalendarEventController::class, 'show']);
         Route::post('/', [CalendarEventController::class, 'store']);
-        Route::put('/{id}', [CalendarEventController::class, 'update']);
-        Route::delete('/{id}', [CalendarEventController::class, 'destroy']);
+        Route::put('/{eventId}', [CalendarEventController::class, 'update']);
+        Route::delete('/{eventId}', [CalendarEventController::class, 'destroy']);
     }
 );

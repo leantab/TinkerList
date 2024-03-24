@@ -28,6 +28,7 @@ class CreateEventTest extends TestCase
         
         $response = $this->actingAs($user, 'api')
             ->withSession(['banned' => false])
+            ->withHeaders(['Accept', 'application/json'])
             ->post('/api/events', [
                 'name' => 'Test Event',
                 'date_time' => '2024-04-01 12:00:00',
