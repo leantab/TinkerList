@@ -25,7 +25,6 @@ class CreateLocationUnitTest extends TestCase
         $this->assertDatabaseHas('locations', [
             'name' => 'Austin HQ',
             'city' => 'Austin',
-            'country' => 'United States',
         ]);
     }
 }

@@ -6,15 +6,11 @@
     You have been invited to a new event at TinkerList Calendar Events.<br>
     Please click the button below to view the event details and confirm your attendance.<br><br>
 
-    <x-mail::button :url="$url">
-        View Event
-    </x-mail::button>
-
     <x-mail::panel>
         <strong>Event Details:</strong><br>
         <strong>Title:</strong> {{ $event->name }}<br>
         <strong>Date:</strong> {{ $event->date_time->format('Y-m-d H:i') }}<br>
-        <strong>Location:</strong> {{ $event->location }}<br>
+        <strong>Location:</strong> {{ $event->location->name }}<br>
     </x-mail::panel>
 
     @if ($newUser)
@@ -26,6 +22,10 @@
         <strong>Password:</strong> "password" <br>
     @endif
 
+    <x-mail::button :url="$url">
+        View Event
+    </x-mail::button>
+
     Thanks, <br>
-    {{ config('app.name') }}
+    TinkerList Calendar Events
 </x-mail::message>
