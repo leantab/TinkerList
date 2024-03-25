@@ -36,12 +36,11 @@ class GetWeatherInfoForEventJob implements ShouldQueue
                 $this->event->date_time->format('H')
             );
         }
-        // dd($response);
-
-        $temp = $response['forecast']['forecastday'][0]['day']['avgtemp_c'] . '°C (' . $response['forecast']['forecastday'][0]['day']['avgtemp_f'] . '°F)';
-        $desc = $response['forecast']['forecastday'][0]['day']['condition']['text'];
-        $weather = $response['forecast']['forecastday'][0]['day']['condition']['icon'];
-        $precipitation = $response['forecast']['forecastday'][0]['day']['daily_chance_of_rain'] . '%';
+        
+        $temp = $response['forecast']['forecastday'][0]['day']['avgtemp_c'] . '°C (' . $response['forecast']['forecastday'][0]['day']['avgtemp_f'] . '°F)' ?? null;
+        $desc = $response['forecast']['forecastday'][0]['day']['condition']['text'] ?? null;
+        $weather = $response['forecast']['forecastday'][0]['day']['condition']['icon'] ?? null;
+        $precipitation = $response['forecast']['forecastday'][0]['day']['daily_chance_of_rain'] ?? null;
 
         $weatherInfo = WeatherInfo::create([
             'event_id' => $this->event->id,

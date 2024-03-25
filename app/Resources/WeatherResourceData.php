@@ -8,10 +8,10 @@ use Spatie\LaravelData\Data;
 class WeatherResourceData extends Data
 {
     public function __construct(
-        public string $temperature,
-        public string $description,
-        public string $weather,
-        public string $precipitationProbability,
+        public ?string $temperature,
+        public ?string $description,
+        public ?string $weather,
+        public ?string $precipitationProbability,
     )
     {
     }
@@ -19,10 +19,10 @@ class WeatherResourceData extends Data
     public static function fromModel(WeatherInfo $weatherInfo): self
     {
         return new self(
-            $weatherInfo->temperature,
-            $weatherInfo->description,
-            $weatherInfo->weather,
-            $weatherInfo->precipitation_probability,
+            $weatherInfo->temperature ?? null,
+            $weatherInfo->description ?? null,
+            $weatherInfo->weather ?? null,
+            $weatherInfo->precipitation_probability ?? null,
         );
     }
 }

@@ -6,7 +6,6 @@ use App\Actions\Locations\CreateLocationAction;
 use App\Http\Requests\LocationCreateRequestData;
 use App\Models\Location;
 use App\Resources\LocationResourceData;
-use App\Services\External\WeatherApiService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,12 +21,12 @@ class LocationController extends Controller
 
     public function index()
     {
-        return Location::all();
+        return LocationResourceData::collect(Location::paginate(15));
     }
 
     public function show($id)
     {
-        return Location::findOrFail($id);
+        return LocationResourceData::fromModel(Location::findOrFail($id));
     }
 
     public function store(LocationCreateRequestData $data): JsonResponse

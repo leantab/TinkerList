@@ -27,6 +27,7 @@ class UpdateEventTest extends TestCase
         $email2 = $this->faker->safeEmail();
         $email3 = $this->faker->safeEmail();
         
+        // Create event
         $response = $this->actingAs($user, 'api')
             ->withSession(['banned' => false])
             ->withHeaders(['Accept', 'application/json'])
@@ -37,22 +38,23 @@ class UpdateEventTest extends TestCase
                 'invitees' => [$email1, $email2],
             ]);
 
-        // $response->dump();
+        // Check event was created
         $response->assertStatus(201);
         
         $eventId = $response->json('id');
 
+        // Update event
         $response = $this->actingAs($user, 'api')
             ->withSession(['banned' => false])
             ->withHeaders(['Accept', 'application/json'])
-            ->put('/api/events/'.$eventId, [
+            ->post('/api/events/edit/'.$eventId, [
                 'name' => 'Updated Test Event',
                 'location_name' => $location,
                 'date_time' => '2024-04-04 14:00:00',
                 'invitees' => [$email1, $email3],
             ]);
         
-        // $response->dump();
+        // check event was updated
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('calendar_events', [

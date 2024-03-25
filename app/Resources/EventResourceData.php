@@ -14,7 +14,7 @@ class EventResourceData extends Data
         public string $dateTime,
         public array $attendees,
         public LocationResourceData $location,
-        public WeatherResourceData $weather,
+        public ?WeatherResourceData $weather,
     )
     {
     }
@@ -28,7 +28,7 @@ class EventResourceData extends Data
             $event->date_time->format('Y-m-d H:i:s'),
             $event->attendees->pluck('email')->toArray(),
             LocationResourceData::fromModel($event->location),
-            WeatherResourceData::fromModel($event->weatherInfo),
+            ($event->weatherInfo != null) ? WeatherResourceData::fromModel($event->weatherInfo) : null,
         );
     }
 }

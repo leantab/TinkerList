@@ -34,12 +34,12 @@ Route::group([
 
 Route::group([
         'prefix' => 'locations',
-        'middleware' => 'api'
+        'middleware' => 'auth:api'
     ], function () {
         Route::get('/', [LocationController::class, 'index']);
         Route::get('/{id}', [LocationController::class, 'show']);
         Route::post('/', [LocationController::class, 'store']);
-        Route::put('/{id}', [LocationController::class, 'update']);
+        Route::post('/edit/{id}', [LocationController::class, 'update']);
     }
 );
 
@@ -48,9 +48,10 @@ Route::group([
         'middleware' => 'auth:api'
     ], function () {
         Route::get('/', [CalendarEventController::class, 'index']);
+        Route::get('/by_location', [CalendarEventController::class, 'byLocations']);
         Route::get('/{eventId}', [CalendarEventController::class, 'show']);
         Route::post('/', [CalendarEventController::class, 'store']);
-        Route::put('/{eventId}', [CalendarEventController::class, 'update']);
+        Route::post('edit/{eventId}', [CalendarEventController::class, 'update']);
         Route::delete('/{eventId}', [CalendarEventController::class, 'destroy']);
     }
 );

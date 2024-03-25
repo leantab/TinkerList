@@ -12,8 +12,8 @@ class LocationCreateTest extends TestCase
     public function test_post_request_to_create_location(): void
     {
         $response = $this->post('/api/locations', [
-            'name' => 'Austin HQ',
-            'city' => 'Austin',
+            'name' => 'NYC HQ',
+            'city' => 'New York',
             'country' => 'United States',
         ]);
 

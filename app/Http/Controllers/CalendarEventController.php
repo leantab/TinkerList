@@ -8,12 +8,15 @@ use App\Actions\Events\UpdateEventAction;
 use App\Http\Requests\EventCreateRequestData;
 use App\Http\Requests\EventUpdateRequestData;
 use App\Models\CalendarEvent;
+use App\Models\Location;
 use App\Models\User;
 use App\Resources\EventResourceData;
 use App\Services\GetOrCreateUserService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CalendarEventController extends Controller
@@ -27,12 +30,35 @@ class CalendarEventController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = User::find(auth('api')->id());
         return EventResourceData::collect(
-            $user->attendedEvents()->orderBy('date_time')->paginate(10) 
+            CalendarEvent::where(function($query) use ($request, $user) {
+                    if ($request->has('date_from')) {
+                        $query->where('date_time', '>=', Carbon::parse($request->date_from));
+                    }
+                    if ($request->has('date_to')) {
+                        $query->where('date_time', '<=', Carbon::parse($request->date_to));
+                    }
+                    if ($request->has('location_id')) {
+                        $query->where('location_id', $request->location_id);
+                    }
+                    $query->whereIn('id', $user->attendedEvents()->pluck('id')->toArray());
+                })
+            ->with(['location', 'attendees'])
+            ->orderBy('date_time')->paginate(10) 
         );
+    }
+
+    public function byLocations()
+    {
+        $user = User::find(auth('api')->id());
+        $events = $user->attendedEvents;
+        return Location::whereHas('events' , function($query) use ($events) {
+            $query->whereIn('id', $events->pluck('id')->toArray());
+            $query->orderBy('date_time');
+        })->with('events', 'events.attendees')->get();
     }
 
     public function show(int $eventId)

@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('location_id')->constrained();
             $table->foreignId('event_id')->constrained('calendar_events');
-            $table->string('temperature');
-            $table->string('description');
-            $table->string('weather');
-            $table->string('precipitation_probability');
-            $table->json('raw_data');
+            $table->string('temperature')->nullable();
+            $table->string('description')->nullable();
+            $table->string('weather')->nullable();
+            $table->string('precipitation_probability')->nullable();
+            $table->json('raw_data')->nullable();
             $table->timestamps();
         });
     }
