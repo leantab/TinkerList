@@ -5,7 +5,7 @@ A Laravel App for TkinkerList hiring process
 ## Steps to boot locally
 * <strong>Docker</strong>
     - Use ```docker compose build``` and ```docker compose up -d``` to run the app.
-    - Then use ```docker exec -it app bash``` and ```cd /app/public ``` to run the other commands.
+    - Then use ```docker exec -it tinkerlist-app bash``` and ```cd /app/public ``` to run the other commands.
     - Run ```composer install```.
     - Use the configuration set in the ```.env.example```
 
@@ -16,6 +16,8 @@ Run ```composer install```
 
 Create the key for JWT authentication
 ```php artisan jwt:secret```
+
+Provide a valid Weather API key in your ```.env``` file
 
 Run migration with ``` php artisan migrate ```. If you wish to have some mock data, there is a seeder you can use by running ``` php artisan db:seed ```.
 
