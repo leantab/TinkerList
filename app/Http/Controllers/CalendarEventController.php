@@ -11,6 +11,7 @@ use App\Models\CalendarEvent;
 use App\Models\Location;
 use App\Models\User;
 use App\Resources\EventResourceData;
+use App\Resources\LocationWithEventsResourceData;
 use App\Services\GetOrCreateUserService;
 use Carbon\Carbon;
 use Exception;
@@ -55,10 +56,11 @@ class CalendarEventController extends Controller
     {
         $user = User::find(auth('api')->id());
         $events = $user->attendedEvents;
-        return Location::whereHas('events' , function($query) use ($events) {
+        $locations = Location::whereHas('events' , function($query) use ($events) {
             $query->whereIn('id', $events->pluck('id')->toArray());
-            $query->orderBy('date_time');
         })->with('events', 'events.attendees')->get();
+
+        return LocationWithEventsResourceData::collect($locations);
     }
 
     public function show(int $eventId)
